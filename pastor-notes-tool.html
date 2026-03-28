@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pastor in Real Life — Notes Brainstorm</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f5f0e8;
+    --cream: #ede7d5;
+    --rust: #b84c1e;
+    --gold: #c9922a;
+    --faded: #9a8f7e;
+    --border: #c8bca8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,160,120,0.15) 28px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--border);
+    position: relative;
+  }
+
+  header::after {
+    content: '✦';
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--paper);
+    padding: 0 12px;
+    color: var(--gold);
+    font-size: 18px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .subtitle { font-style: italic; color: var(--faded); font-size: 15px; }
+
+  .prompt-section { margin-bottom: 36px; }
+
+  .category-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    border: 1px solid var(--rust);
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .prompt-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--rust);
+    padding: 28px 28px 24px;
+    border-radius: 2px;
+    box-shadow: 3px 4px 0 rgba(0,0,0,0.06);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .prompt-text {
+    font-size: 19px;
+    line-height: 1.6;
+    font-style: italic;
+    color: var(--ink);
+    min-height: 60px;
+    transition: opacity 0.25s ease;
+  }
+
+  .prompt-text.fade { opacity: 0; }
+
+  .prompt-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary { background: var(--rust); color: white; }
+  .btn-primary:hover { background: #9a3d16; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary { background: transparent; color: var(--faded); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--faded); color: var(--ink); }
+
+  .scratchpad-section { margin-bottom: 32px; }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faded);
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 16px 18px;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 120px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  textarea:focus { border-color: var(--gold); }
+  textarea::placeholder { color: var(--faded); font-style: italic; }
+
+  .scratchpad-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .entries-section { margin-top: 48px; }
+
+  .entries-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .entries-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+
+  .clear-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--faded);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: underline;
+  }
+
+  .clear-btn:hover { color: var(--rust); }
+
+  .empty-state {
+    text-align: center;
+    color: var(--faded);
+    font-style: italic;
+    padding: 40px 0;
+    font-size: 15px;
+  }
+
+  .entry {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .entry-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .entry-date { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--faded); letter-spacing: 0.08em; }
+  .entry-category { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--rust); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .entry-prompt {
+    font-size: 12px;
+    color: var(--faded);
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    border-left: 2px solid var(--cream);
+    padding-left: 10px;
+  }
+
+  .entry-text { font-size: 15px; line-height: 1.65; color: var(--ink); }
+
+  .entry-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+  .copy-btn, .delete-entry {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    color: var(--faded);
+    padding: 6px 12px;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .delete-entry:hover { border-color: var(--rust); color: var(--rust); }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 10px 20px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">Substack Notes Tool</div>
+    <h1>Pastor in Real Life</h1>
+    <p class="subtitle">What's rattling around in your head today?</p>
+  </header>
+
+  <div class="prompt-section">
+    <div class="category-badge" id="categoryBadge">—</div>
+    <div class="prompt-card">
+      <div class="prompt-text" id="promptText">Hit the button below to get your first prompt.</div>
+      <div class="prompt-actions">
+        <button class="btn btn-primary" id="generateBtn" onclick="generatePrompt()">✦ Give me a prompt</button>
+        <button class="btn btn-secondary" id="shuffleBtn" onclick="generatePrompt()" style="display:none;">↺ Different one</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scratchpad-section">
+    <div class="section-label">Your raw thought</div>
+    <textarea id="scratchpad" placeholder="Don't edit, don't overthink. Just dump it here..."></textarea>
+    <div class="scratchpad-actions">
+      <button class="btn btn-secondary" onclick="copyScratch()">⎘ Copy</button>
+      <button class="btn btn-primary" onclick="saveEntry()">Save this one</button>
+    </div>
+  </div>
+
+  <div class="entries-section">
+    <div class="entries-header">
+      <h2>Saved Ideas</h2>
+      <button class="clear-btn" onclick="clearAll()">Clear all</button>
+    </div>
+    <div id="entriesList"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'pirl_notes_entries';
+const CURRENT_PROMPT = { text: '', category: '' };
+
+const PROMPTS = {
+  "What bugs you": [
+    "What's one piece of Christianese you'd happily never hear again, and what happened the last time someone used it in a meeting?",
+    "What's the one thing people say to pastors that sounds encouraging but actually stings every time?",
+    "What church tradition are you still doing that nobody can explain why you started?",
+    "What's the pastoral equivalent of 'have you tried turning it off and back on again'?",
+    "What's something that gets a standing ovation at church conferences that makes you cringe on the inside?",
+    "What's the most exhausting part of Easter Sunday that nobody outside ministry would ever guess?",
+    "What's a ministry buzzword that's been completely drained of meaning but won't die?",
+    "What's something you've said from the pulpit that sounded great in the moment and made you wince driving home?",
+    "What's the pastoral task nobody warns you about in seminary?",
+    "What's a 'we should do that as a church' idea you've heard a hundred times and quietly dreaded every time?",
+    "What's something well-meaning church people do that pastors silently agree to never talk about?",
+    "What's the most spiritually dressed-up version of gossip you've witnessed in a church setting?",
+    "What's a church meeting format that needs to be retired immediately?",
+    "What's the worst possible time for someone to corner you for a 'quick word'?",
+    "What do people think pastors do all week that makes you want to laugh or cry?",
+    "What's something that gets called 'Spirit-led' that you suspect is just poor planning?",
+    "What church culture expectation do you wish someone had warned you about before you got into ministry?",
+    "What's a compliment pastors get that's actually a passive-aggressive critique in disguise?",
+    "What's the most awkward part of being recognized in public as 'the pastor'?",
+    "What's a church policy that exists because of one person one time and now affects everyone forever?",
+    "What's the pastoral version of a work email that ruins your whole day?",
+    "What's something people assume is easy about preaching that is genuinely hard every single week?",
+    "What's a worship song lyric that you've never been able to sing with a straight face?",
+    "What's a phrase from a church vision statement that means absolutely nothing?",
+    "What's the most elaborate excuse you've ever heard for missing church?",
+  ],
+  "What makes you laugh": [
+    "What's the most absurd thing that's happened mid-sermon that you had to pretend didn't happen?",
+    "What's a moment from your pastoral life that would make a great sitcom scene?",
+    "What's the funniest gap between how you planned a service and how it actually went?",
+    "What's a kid's answer in children's ministry that you're still thinking about?",
+    "What's the most uncomfortable silence you've ever experienced in a church setting?",
+    "What's a pastoral responsibility that sounds completely unhinged when you describe it to a non-church person?",
+    "What's the most creative excuse someone gave for not volunteering?",
+    "What's something Melinda has said after a Sunday that perfectly summed up the whole week?",
+    "What's a moment where the 'professional pastor' mask slipped in the funniest possible way?",
+    "What's the worst potluck dish you've ever had to compliment?",
+    "What's a moment where church tech failed at the worst possible time?",
+    "What's the most unexpected thing someone has said to you right before you went up to preach?",
+    "What's a sermon illustration that seemed brilliant in your notes and landed completely differently out loud?",
+    "What's the most awkward thing about doing a wedding for people you barely know?",
+    "What's a behind-the-scenes moment from church that would shock most people in the congregation?",
+    "What's something about pastor life that is objectively ridiculous but you've fully normalized?",
+    "What's the funniest wrong name someone has called you from the pulpit?",
+    "What's a church event that was supposed to be fun and became a minor disaster?",
+    "What's the most creative interpretation of a Bible verse you've ever heard from a congregant?",
+    "What's something your kids have said about your job that was accidentally more theologically accurate than you expected?",
+    "What's the most chaotic thing that's happened at a church potluck?",
+    "What's a pastor stereotype that is frustratingly accurate about you specifically?",
+    "What's the worst advice you got from a well-meaning mentor early in ministry?",
+    "What's an inside joke between you and Melinda that only makes sense because of church life?",
+    "What's something that happens every single Christmas Eve service without fail?",
+  ],
+  "What you wish you could say": [
+    "What's something you'd say from the pulpit if you weren't worried about how it would land?",
+    "What's the honest answer to 'how's the church going?' that you never actually give?",
+    "What's a sermon you wish you could preach but probably never will?",
+    "What's something you know about burnout in ministry that the church culture doesn't want to hear?",
+    "What do you wish someone had told you on your first Sunday as a pastor?",
+    "What's a hard truth about church attendance that nobody wants to say out loud?",
+    "What's something you've learned about faith from your lowest moments that doesn't fit neatly into a sermon?",
+    "What would you say to a brand new pastor that the seminary didn't cover?",
+    "What's a question about God you've sat with for years that you haven't resolved?",
+    "What's the honest version of your testimony that you rarely tell?",
+    "What do you actually think when someone says 'God told me' in a church meeting?",
+    "What's something about the pastor-congregation relationship that feels quietly broken?",
+    "What's a doubt you've carried through a season of ministry that actually made you a better pastor?",
+    "What's something you'd say to the version of yourself from ten years ago in ministry?",
+    "What's an apology you think the institutional church owes people?",
+    "What's a real cost of ministry that sounds ungrateful to admit?",
+    "What's something the 'highlight reel' version of your church doesn't show?",
+    "What do you actually think about the pressure to grow a church numerically?",
+    "What's a spiritual practice that sounds impressive but hasn't worked for you personally?",
+    "What's something about grief that you've learned from walking with people through it that changed how you read scripture?",
+    "What's an honest thing about prayer that you wouldn't say in a prayer meeting?",
+    "What's a moment where you showed up as a pastor when you had nothing left — and what did that actually feel like?",
+    "What's the real reason pastors don't talk about money struggles?",
+    "What do you wish your congregation understood about what Sundays feel like from your side of the room?",
+    "What's something about rest and sabbath that you preach but have struggled to practice?",
+  ],
+  "What you value": [
+    "What's one thing you'd refuse to give up about how you do ministry, even if it's not trendy?",
+    "What does a good Sunday actually feel like for you — not the metrics, the actual feeling?",
+    "What's something about small church life that you think gets undersold?",
+    "What's a moment in ministry that reminded you why you do this?",
+    "What's something about showing up consistently that you think matters more than any single big moment?",
+    "What's a quality in a pastor that you respect more than charisma or communication?",
+    "What's something about online ministry that surprised you with how real it felt?",
+    "What does faithfulness look like on a Tuesday when nobody's watching?",
+    "What's a small, unspectacular thing about your church that you're quietly proud of?",
+    "What's something you've learned about community from people who didn't grow up in church?",
+    "What's a moment where someone's honesty in a conversation changed something in you?",
+    "What does it mean to you to be a pastor who is also just a person?",
+    "What's something about marriage that ministry has taught you unexpectedly?",
+    "What's a conviction about preaching you hold that not everyone agrees with?",
+    "What's something about doubt that you think the church has gotten wrong?",
+    "What does it look like to love a congregation through a hard season without pretending it isn't hard?",
+    "What's something you've seen in people at their worst moments that gave you hope?",
+    "What's a value you hold about creativity and storytelling in ministry?",
+    "What's something about humor in church that you think matters theologically?",
+    "What's a lesson about leadership you learned the hard way?",
+    "What does integrity look like when nobody from your church is watching?",
+    "What's something about the long game in ministry that doesn't get talked about enough?",
+    "What's a moment where being honest cost you something but felt right?",
+    "What's something about grief and lament that you think the church needs more of?",
+    "What's a practice or rhythm in your life that keeps you grounded outside of ministry performance?",
+  ],
+  "What you refuse to do": [
+    "What's a church growth strategy you've been pitched that you wanted no part of?",
+    "What's something you've decided you won't pretend anymore after a certain point in ministry?",
+    "What's a version of 'pastor' that you've consciously decided not to become?",
+    "What's something about social media and ministry that you've drawn a line on?",
+    "What's a leadership style you watched closely and decided wasn't for you?",
+    "What's something the 'successful church' playbook says to do that doesn't sit right with you?",
+    "What's a pastoral expectation you've quietly stopped meeting — and why?",
+    "What's something you won't apologize for about how you preach?",
+    "What's a thing people expect pastors to be immune to that you've stopped pretending about?",
+    "What's a type of meeting you've decided isn't worth your time anymore?",
+    "What's something about hustle culture that has crept into ministry that you want nothing to do with?",
+    "What's a way of doing church that prioritizes comfort over honesty that you've walked away from?",
+    "What's a boundary you've set in ministry that surprised people but you've kept anyway?",
+    "What's something about the performative side of ministry you've decided to drop?",
+    "What's a pressure you've felt to present your family a certain way that you've stopped giving in to?",
+    "What's a version of success in ministry that doesn't interest you anymore?",
+    "What's something you won't do to make a sermon more shareable?",
+    "What's a thing you used to believe about church that you've changed your mind on?",
+    "What's something you've stopped saying from the pulpit because it wasn't actually true for you?",
+    "What's a comparison trap in ministry you've had to consciously opt out of?",
+    "What's a thing well-meaning people keep suggesting that you've decided just isn't you?",
+    "What's something about the celebrity pastor culture you've consciously rejected?",
+    "What's a way of handling conflict in church that you've learned the hard way doesn't work?",
+    "What's something you've stopped doing on Sunday mornings that made everything better?",
+    "What's a type of content you won't create just for the algorithm?",
+  ],
+  "What you're tired of": [
+    "What's something in church culture right now that you're genuinely exhausted by?",
+    "What's a conversation you've had so many times in ministry that you could have it in your sleep?",
+    "What's a season of church life that drains you every single year without fail?",
+    "What's something about the way people talk about 'revival' that wears you out?",
+    "What's a criticism of the church that you're tired of — not because it's wrong, but because it's lazy?",
+    "What's a type of church conflict that is always, always about something other than what it's actually about?",
+    "What's something about comparison culture in ministry that you're done engaging with?",
+    "What's a thing people expect pastors to have figured out that you're still very much figuring out?",
+    "What's an assumption people make about your marriage because you're a pastor that gets old?",
+    "What's something about the Sunday morning experience that you're quietly over?",
+    "What's a type of feedback you get regularly that you've stopped knowing how to respond to?",
+    "What's a thing about pastoral loneliness that doesn't get said enough?",
+    "What's something the church talks about constantly that never seems to actually change?",
+    "What's a phrase about 'doing life together' that has lost all meaning through overuse?",
+    "What's an expectation of availability that comes with being a pastor that you're still negotiating?",
+    "What's something about the way churches handle failure that you're tired of seeing?",
+    "What's a trend in worship music that you're quietly relieved is fading?",
+    "What's something about the 'pastor as CEO' model that you've had enough of?",
+    "What's a thing people assume about your faith because of your job that couldn't be further from reality?",
+    "What's a type of church announcement that could have been an email?",
+    "What's something about 'church hurt' conversations that is both completely valid and also genuinely complicated?",
+    "What's a thing in ministry that gets romanticized from the outside that is just plain hard from the inside?",
+    "What's something about the pressure to have a perfectly composed online presence that you're done with?",
+    "What's a ministry metric that everyone tracks and nobody actually believes tells the whole story?",
+    "What's something about the way pastors are expected to handle their own grief that needs to change?",
+  ]
+};
+
+const CATEGORY_NAMES = Object.keys(PROMPTS);
+let usedIndices = {};
+
+function generatePrompt() {
+  const category = CATEGORY_NAMES[Math.floor(Math.random() * CATEGORY_NAMES.length)];
+  const pool = PROMPTS[category];
+
+  if (!usedIndices[category]) usedIndices[category] = [];
+  if (usedIndices[category].length >= pool.length) usedIndices[category] = [];
+
+  let idx;
+  do { idx = Math.floor(Math.random() * pool.length); }
+  while (usedIndices[category].includes(idx));
+  usedIndices[category].push(idx);
+
+  const promptText = document.getElementById('promptText');
+  const categoryBadge = document.getElementById('categoryBadge');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const generateBtn = document.getElementById('generateBtn');
+
+  promptText.classList.add('fade');
+  setTimeout(() => {
+    promptText.textContent = pool[idx];
+    categoryBadge.textContent = category;
+    CURRENT_PROMPT.text = pool[idx];
+    CURRENT_PROMPT.category = category;
+    promptText.classList.remove('fade');
+    generateBtn.style.display = 'none';
+    shuffleBtn.style.display = 'flex';
+  }, 200);
+}
+
+function copyScratch() {
+  const text = document.getElementById('scratchpad').value.trim();
+  if (!text) { showToast('Nothing to copy!'); return; }
+  navigator.clipboard.writeText(text).then(() => showToast('Copied!')).catch(() => {
+    // fallback for older mobile browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied!');
+  });
+}
+
+function copyEntry(id) {
+  const entries = loadEntries();
+  const entry = entries.find(e => e.id === id);
+  if (!entry) return;
+  navigator.clipboard.writeText(entry.text).then(() => showToast('Copied!')).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = entry.text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied!');
+  });
+}
+
+function saveEntry() {
+  const text = document.getElementById('scratchpad').value.trim();
+  if (!text) { showToast('Write something first!'); return; }
+
+  const entries = loadEntries();
+  entries.unshift({
+    id: Date.now(),
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    category: CURRENT_PROMPT.category || '',
+    prompt: CURRENT_PROMPT.text || '',
+    text
+  });
+
+  saveEntries(entries);
+  renderEntries();
+  document.getElementById('scratchpad').value = '';
+  showToast('Saved!');
+}
+
+function deleteEntry(id) {
+  saveEntries(loadEntries().filter(e => e.id !== id));
+  renderEntries();
+}
+
+function clearAll() {
+  saveEntries([]);
+  renderEntries();
+  showToast('All cleared!');
+}
+
+function renderEntries() {
+  const entries = loadEntries();
+  const list = document.getElementById('entriesList');
+
+  if (entries.length === 0) {
+    list.innerHTML = '<div class="empty-state">Your saved ideas will appear here.</div>';
+    return;
+  }
+
+  list.innerHTML = entries.map(e => `
+    <div class="entry">
+      <div class="entry-meta">
+        <span class="entry-date">${e.date}</span>
+        ${e.category ? '<span class="entry-category">' + e.category + '</span>' : ''}
+      </div>
+      ${e.prompt ? '<div class="entry-prompt">' + escapeHtml(e.prompt) + '</div>' : ''}
+      <div class="entry-text">${escapeHtml(e.text)}</div>
+      <div class="entry-actions">
+        <button class="copy-btn" onclick="copyEntry(${e.id})">⎘ Copy</button>
+        <button class="delete-entry" onclick="deleteEntry(${e.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function loadEntries() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveEntries(entries) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+renderEntries();
+</script>
+</body>
+</html>
