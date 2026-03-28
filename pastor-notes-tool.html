@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pastor in Real Life — Notes Brainstorm</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f5f0e8;
+    --cream: #ede7d5;
+    --rust: #b84c1e;
+    --gold: #c9922a;
+    --faded: #9a8f7e;
+    --border: #c8bca8;
+    --green: #2e6e4e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,160,120,0.15) 28px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--border);
+    position: relative;
+  }
+
+  header::after {
+    content: '✦';
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--paper);
+    padding: 0 12px;
+    color: var(--gold);
+    font-size: 18px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .subtitle { font-style: italic; color: var(--faded); font-size: 15px; }
+
+  .prompt-section { margin-bottom: 36px; }
+
+  .category-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    border: 1px solid var(--rust);
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .category-badge.visible { opacity: 1; }
+
+  .prompt-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--rust);
+    padding: 28px 28px 24px;
+    border-radius: 2px;
+    box-shadow: 3px 4px 0 rgba(0,0,0,0.06);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .prompt-text {
+    font-size: 19px;
+    line-height: 1.6;
+    font-style: italic;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    min-height: 60px;
+  }
+
+  .prompt-text.visible { opacity: 1; transform: translateY(0); }
+  .prompt-text.loading { opacity: 0.4; font-style: normal; font-size: 15px; color: var(--faded); }
+
+  .prompt-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary { background: var(--rust); color: white; }
+  .btn-primary:hover { background: #9a3d16; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary { background: transparent; color: var(--faded); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--faded); color: var(--ink); }
+
+  .btn-tighten { background: transparent; color: var(--green); border: 1px solid var(--green); }
+  .btn-tighten:hover { background: var(--green); color: white; }
+
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+  .scratchpad-section { margin-bottom: 32px; }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faded);
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 16px 18px;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 120px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  textarea:focus { border-color: var(--gold); }
+  textarea::placeholder { color: var(--faded); font-style: italic; }
+
+  .scratchpad-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* TIGHTEN PANEL */
+  .tighten-panel {
+    display: none;
+    margin-top: 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .tighten-panel.visible { display: block; }
+
+  .tighten-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 480px) {
+    .tighten-cols { grid-template-columns: 1fr; }
+  }
+
+  .tighten-col { padding: 16px; background: white; }
+
+  .tighten-col:first-child { border-right: 1px solid var(--border); }
+
+  @media (max-width: 480px) {
+    .tighten-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  .tighten-col-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faded);
+    margin-bottom: 10px;
+  }
+
+  .tighten-col-label.green { color: var(--green); }
+
+  .tighten-original { font-size: 14px; line-height: 1.65; color: var(--faded); font-style: italic; }
+
+  .tighten-result { font-size: 14px; line-height: 1.65; color: var(--ink); }
+  .tighten-result.loading { color: var(--faded); font-style: italic; font-size: 13px; }
+
+  .tighten-footer {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .btn-accept {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-accept:hover { background: #235c3f; }
+  .btn-accept:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-dismiss {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    color: var(--faded);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-dismiss:hover { color: var(--ink); border-color: var(--faded); }
+
+  /* ENTRIES */
+  .entries-section { margin-top: 48px; }
+
+  .entries-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .entries-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+
+  .clear-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--faded);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: underline;
+  }
+
+  .clear-btn:hover { color: var(--rust); }
+
+  .empty-state {
+    text-align: center;
+    color: var(--faded);
+    font-style: italic;
+    padding: 40px 0;
+    font-size: 15px;
+  }
+
+  .entry {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .entry-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+
+  .entry-date { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--faded); letter-spacing: 0.08em; }
+  .entry-category { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--rust); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .entry-prompt {
+    font-size: 12px;
+    color: var(--faded);
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    border-left: 2px solid var(--cream);
+    padding-left: 10px;
+  }
+
+  .entry-text { font-size: 15px; line-height: 1.65; color: var(--ink); }
+
+  .entry-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+  .delete-entry {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    color: var(--faded);
+    padding: 6px 12px;
+    transition: all 0.15s;
+  }
+
+  .delete-entry:hover { border-color: var(--rust); color: var(--rust); }
+
+  .tighten-entry-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--green);
+    border-radius: 2px;
+    cursor: pointer;
+    color: var(--green);
+    padding: 6px 12px;
+    transition: all 0.15s;
+  }
+
+  .tighten-entry-btn:hover { background: var(--green); color: white; }
+  .tighten-entry-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 10px 20px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .error-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--rust);
+    padding: 12px 0 0;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">Substack Notes Tool</div>
+    <h1>Pastor in Real Life</h1>
+    <p class="subtitle">What's rattling around in your head today?</p>
+  </header>
+
+  <div class="prompt-section">
+    <div class="category-badge" id="categoryBadge"></div>
+    <div class="prompt-card">
+      <div class="prompt-text" id="promptText">Hit the button below to get your first prompt.</div>
+      <div class="prompt-actions">
+        <button class="btn btn-primary" id="generateBtn" onclick="generatePrompt()">✦ Give me a prompt</button>
+        <button class="btn btn-secondary" id="shuffleBtn" onclick="generatePrompt()" style="display:none;">↺ Different one</button>
+      </div>
+    </div>
+    <div class="error-msg" id="errorMsg">Couldn't reach the AI. Check your connection and try again.</div>
+  </div>
+
+  <div class="scratchpad-section">
+    <div class="section-label">Your raw thought</div>
+    <textarea id="scratchpad" placeholder="Don't edit, don't overthink. Just dump it here..."></textarea>
+
+    <div class="tighten-panel" id="scratchTightenPanel">
+      <div class="tighten-cols">
+        <div class="tighten-col">
+          <div class="tighten-col-label">Original</div>
+          <div class="tighten-original" id="scratchOriginal"></div>
+        </div>
+        <div class="tighten-col">
+          <div class="tighten-col-label green">Tightened</div>
+          <div class="tighten-result" id="scratchTightened"></div>
+        </div>
+      </div>
+      <div class="tighten-footer">
+        <button class="btn-dismiss" onclick="dismissScratchTighten()">Dismiss</button>
+        <button class="btn-accept" id="scratchAcceptBtn" onclick="acceptScratchTighten()" disabled>Use this version</button>
+      </div>
+    </div>
+
+    <div class="scratchpad-actions">
+      <button class="btn btn-tighten" id="scratchTightenBtn" onclick="tightenScratch()">✎ Tighten it</button>
+      <button class="btn btn-primary" onclick="saveEntry()">Save this one</button>
+    </div>
+  </div>
+
+  <div class="entries-section">
+    <div class="entries-header">
+      <h2>Saved Ideas</h2>
+      <button class="clear-btn" onclick="clearAll()">Clear all</button>
+    </div>
+    <div id="entriesList"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'pirl_notes_entries';
+const CURRENT_PROMPT = { text: '', category: '' };
+let scratchTightenedText = '';
+
+const CATEGORIES = [
+  "What bugs you",
+  "What makes you laugh",
+  "What you wish you could say",
+  "What you value",
+  "What you refuse to do",
+  "What you're tired of"
+];
+
+const PROMPT_SYSTEM = `You are a creative writing prompt generator for a Substack called "Pastor in Real Life."
+
+The writer is Tim — a pastor with a conversational, self-deprecating, humor-forward voice. He writes about the gap between the ideal of pastor life and the messy reality. His readers are people tired of fake, polished Christianity. They want honesty, humor, and vulnerability.
+
+You will be given a category. Generate ONE single writing prompt for a short Substack Note (not a full post). The prompt should:
+- Be specific and personal, not generic
+- Spark a memory, observation, or hot take from Tim's real life
+- Feel like an inside joke or a thing you'd say to a friend
+- Be conversational, a bit raw, maybe a little funny
+- NOT be preachy or churchy-sounding
+- Be 1-2 sentences max
+
+Just return the prompt. No intro, no label, no explanation. The prompt itself only.`;
+
+const TIGHTEN_SYSTEM = `You are a light editorial assistant for a Substack called "Pastor in Real Life."
+
+The writer is Tim — a pastor with a conversational, self-deprecating, humor-forward voice. His style is intentionally rough around the edges, not polished or sermon-like. Short paragraphs, skimmable.
+
+Your job: tighten the grammar and flow of Tim's raw note WITHOUT changing his voice. Rules:
+- Keep it in his voice — casual, first person, a little self-deprecating
+- Fix grammar and clarity only
+- Cut filler words, not personality
+- No em-dashes
+- No smooth AI-sounding transitions
+- Don't make it more "spiritual" or churchy
+- Don't add anything that wasn't there
+- Keep it roughly the same length or shorter
+
+Return ONLY the tightened text. No preamble, no explanation.`;
+
+async function callClaude(system, userMsg) {
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      system,
+      messages: [{ role: "user", content: userMsg }]
+    })
+  });
+  const data = await response.json();
+  const text = data.content?.[0]?.text?.trim();
+  if (!text) throw new Error('No response');
+  return text;
+}
+
+async function generatePrompt() {
+  const generateBtn = document.getElementById('generateBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const promptText = document.getElementById('promptText');
+  const categoryBadge = document.getElementById('categoryBadge');
+  const errorMsg = document.getElementById('errorMsg');
+
+  generateBtn.disabled = true;
+  shuffleBtn.disabled = true;
+  errorMsg.style.display = 'none';
+
+  const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+  CURRENT_PROMPT.category = category;
+
+  promptText.className = 'prompt-text loading visible';
+  promptText.textContent = 'Thinking...';
+  categoryBadge.className = 'category-badge';
+  categoryBadge.textContent = category;
+
+  try {
+    const text = await callClaude(PROMPT_SYSTEM, `Category: ${category}\n\nGenerate a Substack Notes writing prompt for Tim.`);
+    CURRENT_PROMPT.text = text;
+    promptText.className = 'prompt-text';
+    promptText.textContent = text;
+    setTimeout(() => promptText.classList.add('visible'), 20);
+    categoryBadge.className = 'category-badge visible';
+    generateBtn.style.display = 'none';
+    shuffleBtn.style.display = 'flex';
+  } catch (err) {
+    promptText.className = 'prompt-text visible';
+    promptText.textContent = 'Something went wrong. Try again.';
+    errorMsg.style.display = 'block';
+    categoryBadge.className = 'category-badge';
+  }
+
+  generateBtn.disabled = false;
+  shuffleBtn.disabled = false;
+}
+
+async function tightenScratch() {
+  const raw = document.getElementById('scratchpad').value.trim();
+  if (!raw) { showToast('Write something first!'); return; }
+
+  const btn = document.getElementById('scratchTightenBtn');
+  const panel = document.getElementById('scratchTightenPanel');
+  const original = document.getElementById('scratchOriginal');
+  const tightened = document.getElementById('scratchTightened');
+  const acceptBtn = document.getElementById('scratchAcceptBtn');
+
+  btn.disabled = true;
+  btn.textContent = 'Tightening...';
+  scratchTightenedText = '';
+  acceptBtn.disabled = true;
+
+  original.textContent = raw;
+  tightened.className = 'tighten-result loading';
+  tightened.textContent = 'Working on it...';
+  panel.className = 'tighten-panel visible';
+
+  try {
+    const result = await callClaude(TIGHTEN_SYSTEM, raw);
+    scratchTightenedText = result;
+    tightened.className = 'tighten-result';
+    tightened.textContent = result;
+    acceptBtn.disabled = false;
+  } catch (err) {
+    tightened.className = 'tighten-result';
+    tightened.textContent = 'Something went wrong. Try again.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✎ Tighten it';
+}
+
+function acceptScratchTighten() {
+  if (!scratchTightenedText) return;
+  document.getElementById('scratchpad').value = scratchTightenedText;
+  dismissScratchTighten();
+  showToast('Updated!');
+}
+
+function dismissScratchTighten() {
+  document.getElementById('scratchTightenPanel').className = 'tighten-panel';
+  scratchTightenedText = '';
+}
+
+async function tightenEntry(id) {
+  const entries = loadEntries();
+  const entry = entries.find(e => e.id === id);
+  if (!entry) return;
+
+  const panel = document.getElementById('etp-' + id);
+  const original = document.getElementById('eto-' + id);
+  const tightened = document.getElementById('ett-' + id);
+  const btn = document.getElementById('etb-' + id);
+  const acceptBtn = document.getElementById('eta-' + id);
+
+  btn.disabled = true;
+  btn.textContent = 'Tightening...';
+  acceptBtn.disabled = true;
+
+  original.textContent = entry.text;
+  tightened.className = 'tighten-result loading';
+  tightened.textContent = 'Working on it...';
+  panel.className = 'tighten-panel visible';
+
+  try {
+    const result = await callClaude(TIGHTEN_SYSTEM, entry.text);
+    tightened.className = 'tighten-result';
+    tightened.textContent = result;
+    acceptBtn.dataset.tightened = result;
+    acceptBtn.disabled = false;
+  } catch (err) {
+    tightened.className = 'tighten-result';
+    tightened.textContent = 'Something went wrong. Try again.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✎ Tighten';
+}
+
+function acceptEntryTighten(id) {
+  const acceptBtn = document.getElementById('eta-' + id);
+  const newText = acceptBtn.dataset.tightened;
+  if (!newText) return;
+
+  const entries = loadEntries();
+  const idx = entries.findIndex(e => e.id === id);
+  if (idx === -1) return;
+  entries[idx].text = newText;
+  saveEntries(entries);
+  renderEntries();
+  showToast('Updated!');
+}
+
+function dismissEntryTighten(id) {
+  const panel = document.getElementById('etp-' + id);
+  if (panel) panel.className = 'tighten-panel';
+}
+
+function saveEntry() {
+  const text = document.getElementById('scratchpad').value.trim();
+  if (!text) { showToast('Write something first!'); return; }
+
+  const entries = loadEntries();
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    category: CURRENT_PROMPT.category || '',
+    prompt: CURRENT_PROMPT.text || '',
+    text
+  };
+
+  entries.unshift(entry);
+  saveEntries(entries);
+  renderEntries();
+  document.getElementById('scratchpad').value = '';
+  dismissScratchTighten();
+  showToast('Saved!');
+}
+
+function deleteEntry(id) {
+  const entries = loadEntries().filter(e => e.id !== id);
+  saveEntries(entries);
+  renderEntries();
+}
+
+function clearAll() {
+  saveEntries([]);
+  renderEntries();
+  showToast('All cleared!');
+}
+
+function renderEntries() {
+  const entries = loadEntries();
+  const list = document.getElementById('entriesList');
+
+  if (entries.length === 0) {
+    list.innerHTML = '<div class="empty-state">Your saved ideas will appear here.</div>';
+    return;
+  }
+
+  list.innerHTML = entries.map(e => `
+    <div class="entry">
+      <div class="entry-meta">
+        <span class="entry-date">${e.date}</span>
+        ${e.category ? '<span class="entry-category">' + e.category + '</span>' : ''}
+      </div>
+      ${e.prompt ? '<div class="entry-prompt">' + escapeHtml(e.prompt) + '</div>' : ''}
+      <div class="entry-text">${escapeHtml(e.text)}</div>
+
+      <div class="tighten-panel" id="etp-${e.id}">
+        <div class="tighten-cols">
+          <div class="tighten-col">
+            <div class="tighten-col-label">Original</div>
+            <div class="tighten-original" id="eto-${e.id}"></div>
+          </div>
+          <div class="tighten-col">
+            <div class="tighten-col-label green">Tightened</div>
+            <div class="tighten-result" id="ett-${e.id}"></div>
+          </div>
+        </div>
+        <div class="tighten-footer">
+          <button class="btn-dismiss" onclick="dismissEntryTighten(${e.id})">Dismiss</button>
+          <button class="btn-accept" id="eta-${e.id}" onclick="acceptEntryTighten(${e.id})" disabled>Use this version</button>
+        </div>
+      </div>
+
+      <div class="entry-actions">
+        <button class="tighten-entry-btn" id="etb-${e.id}" onclick="tightenEntry(${e.id})">✎ Tighten</button>
+        <button class="delete-entry" onclick="deleteEntry(${e.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function loadEntries() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveEntries(entries) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+renderEntries();
+</script>
+</body>
+</html>
